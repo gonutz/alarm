@@ -12,7 +12,7 @@ import (
 
 var (
 	atTime = flag.String("at", "", "time at which to ring the alarm in the form "+time.Kitchen)
-	inTime = flag.String("in", "", "time after which to ring the alarm from now")
+	inTime = flag.String("in", "", "time after which to ring the alarm from now, e.g. 5s or 1h15m")
 )
 
 func main() {
