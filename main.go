@@ -13,6 +13,7 @@ import (
 var (
 	atTime = flag.String("at", "", "time at which to ring the alarm in the form "+time.Kitchen)
 	inTime = flag.String("in", "", "time after which to ring the alarm from now, e.g. 5s or 1h15m")
+	msg    = flag.String("msg", "", "alarm message")
 )
 
 func main() {
@@ -71,7 +72,11 @@ func main() {
 				return w32.DefWindowProc(window, msg, w, l)
 			}
 		})
-	w32.SetWindowText(window, "Alarm")
+	title := "Alarm"
+	if *msg != "" {
+		title = *msg
+	}
+	w32.SetWindowText(window, title)
 	if err != nil {
 		panic(err)
 	}
