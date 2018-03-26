@@ -18,7 +18,7 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of %s:\nExactly one of these arguments must be valid\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage of %s:\nEither the -at or -in option must be valid\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 	flag.Parse()
