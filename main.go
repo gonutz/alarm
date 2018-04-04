@@ -62,23 +62,28 @@ func main() {
 	win.HideConsoleWindow()
 	time.Sleep(waitTime)
 	w32.MessageBeep(0)
-	window, err := win.NewWindow(
-		0, 0, 600, 600, "alarm_window",
-		func(window w32.HWND, msg uint32, w, l uintptr) uintptr {
-			if msg == w32.WM_DESTROY {
-				w32.PostQuitMessage(0)
-				return 0
-			} else {
-				return w32.DefWindowProc(window, msg, w, l)
-			}
-		})
-	title := "Alarm"
+	start := time.Now()
+	opts := win.DefaultOptions()
+	opts.ClassName = "alarm_window"
+	opts.Title = "Alarm"
 	if *msg != "" {
-		title = *msg
+		opts.Title = *msg
 	}
-	w32.SetWindowText(window, title)
+	var handler win.MessageHandler
+	window, err := win.NewWindow(opts, handler.Callback)
 	if err != nil {
 		panic(err)
+	}
+	w32.SetTimer(window, 0, 1000, 0)
+	handler.OnKeyDown = func(key uintptr, _ win.KeyOptions) {
+		if key == w32.VK_ESCAPE {
+			win.CloseWindow(window)
+		}
+	}
+	handler.OnTimer = func(id uintptr) {
+		dur := time.Now().Sub(start)
+		dur = dur - dur%time.Second
+		w32.SetWindowText(window, fmt.Sprintf("%s - %v ago", opts.Title, dur))
 	}
 	win.RunMainLoop()
 }
