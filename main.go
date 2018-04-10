@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gonutz/w32"
@@ -18,7 +19,10 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of %s:\nEither the -at or -in option must be valid\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, `Usage of %s:
+Either the -at or -in option must be valid.
+If no -msg is given, all non-flag arguments are combined to form the message.
+`, os.Args[0])
 		flag.PrintDefaults()
 	}
 	flag.Parse()
@@ -27,6 +31,10 @@ func main() {
 	if (*atTime == "") == (*inTime == "") {
 		flag.Usage()
 		return
+	}
+
+	if *msg == "" && len(flag.Args()) > 0 {
+		*msg = strings.Join(flag.Args(), " ")
 	}
 
 	var waitTime time.Duration
