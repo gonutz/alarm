@@ -30,6 +30,7 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 	// exactly one of the arguments has to be non-empty
 	if (*atTime == "") == (*inTime == "") {
 		flag.Usage()
+		fmt.Scanln()
 		return
 	}
 
@@ -43,6 +44,7 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error parsing time at which to ring the alarm:", err)
 			flag.Usage()
+			fmt.Scanln()
 			return
 		}
 		now := time.Now()
@@ -62,6 +64,7 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error parsing time at which to ring the alarm:", err)
 			flag.Usage()
+			fmt.Scanln()
 			return
 		}
 		waitTime = in
