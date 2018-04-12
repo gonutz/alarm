@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -40,7 +42,7 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 
 	var waitTime time.Duration
 	if *atTime != "" {
-		at, err := time.Parse(time.Kitchen, *atTime)
+		at, err := parseTime(*atTime)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error parsing time at which to ring the alarm:", err)
 			flag.Usage()
@@ -97,4 +99,43 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 		w32.SetWindowText(window, fmt.Sprintf("%s - %v ago", opts.Title, dur))
 	}
 	win.RunMainLoop()
+}
+
+func parseTime(s string) (time.Time, error) {
+	t, err := time.Parse(time.Kitchen, s)
+	if err == nil {
+		return t, nil
+	}
+	var hStr, minStr string
+	if strings.Contains(s, ":") {
+		parts := strings.SplitN(s, ":", 2)
+		hStr = parts[0]
+		minStr = parts[1]
+	} else {
+		hStr = s
+		minStr = "0"
+	}
+	h, err := strconv.Atoi(hStr)
+	if err != nil {
+		return time.Time{}, err
+	}
+	min, err := strconv.Atoi(minStr)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if !(0 <= h && h <= 23) {
+		return time.Time{}, errors.New("hours must be in the range [0..23]")
+	}
+	if !(0 <= min && min <= 59) {
+		return time.Time{}, errors.New("minutes must be in the range [0..59]")
+	}
+	ampm := "AM"
+	if h >= 13 {
+		h -= 12
+		ampm = "PM"
+	}
+	return time.Parse(time.Kitchen, fmt.Sprintf(
+		"%d%d:%d%d%s",
+		h/10, h%10, min/10, min%10, ampm,
+	))
 }
