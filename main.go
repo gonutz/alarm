@@ -130,6 +130,9 @@ func parseTime(s string) (time.Time, error) {
 		return time.Time{}, errors.New("minutes must be in the range [0..59]")
 	}
 	ampm := "AM"
+	if h == 12 {
+		ampm = "PM"
+	}
 	if h >= 13 {
 		h -= 12
 		ampm = "PM"
