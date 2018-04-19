@@ -88,11 +88,6 @@ If no -msg is given, all non-flag arguments are combined to form the message.
 		panic(err)
 	}
 	w32.SetTimer(window, 0, 1000, 0)
-	handler.OnKeyDown = func(key uintptr, _ win.KeyOptions) {
-		if key == w32.VK_ESCAPE {
-			win.CloseWindow(window)
-		}
-	}
 	handler.OnTimer = func(id uintptr) {
 		dur := time.Now().Sub(start)
 		dur = dur - dur%time.Second
