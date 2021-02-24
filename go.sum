@@ -1,0 +1,4 @@
+github.com/gonutz/w32/v2 v2.0.1 h1:GgPRCInDWUSAQR6Nfhr4f/Z47vb1ZHssjySOVfbbWnk=
+github.com/gonutz/w32/v2 v2.0.1/go.mod h1:MgtHx0AScDVNKyB+kjyPder4xIi3XAcHS6LDDU2DmdE=
+github.com/gonutz/win v1.0.0 h1:vJlSaUrGOOMWOCKHl3P2hcs0oJRVAjyvJLlm0v2oS0o=
+github.com/gonutz/win v1.0.0/go.mod h1:qiGR0TP9Iagbq+5Y/HCZGwlpe/LTLL02WnzhlBeKU3A=
